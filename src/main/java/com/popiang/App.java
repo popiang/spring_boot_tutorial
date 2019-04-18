@@ -1,21 +1,42 @@
 package com.popiang;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles3.TilesView;
 
-@Controller
-@EnableAutoConfiguration
+@SpringBootApplication
 public class App {
 
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
 	}
 	
-	@RequestMapping("/")
-	public String home() {
-		return "home";
+	//
+	// required for using TILES
+	//
+	@Bean
+	public TilesConfigurer tilesConfigurer() {
+		
+		TilesConfigurer tilesConfigurer = new TilesConfigurer();
+		String [] defs = {"/WEB-INF/tiles.xml"};
+		tilesConfigurer.setDefinitions(defs);
+		
+		return tilesConfigurer;
 	}
 
+	//
+	// required for using TILES
+	//	
+	@Bean
+	public UrlBasedViewResolver tilesViewResolver() {
+		
+		UrlBasedViewResolver tilesViewResolver = new UrlBasedViewResolver();
+		tilesViewResolver.setViewClass(TilesView.class);
+
+		return tilesViewResolver;
+	}
+	
 }
