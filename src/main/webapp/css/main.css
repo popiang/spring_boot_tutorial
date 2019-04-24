@@ -3,3 +3,12 @@
 .navbar-dark .nav-item:hover .nav-link {
         color: lime;
 }
+
+.main-container {
+	margin-top: 20px;
+}
+
+.card-header {
+	font-weight: bold;
+	color: white;
+}
