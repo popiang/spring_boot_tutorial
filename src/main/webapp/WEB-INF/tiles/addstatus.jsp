@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <div class="row d-flex justify-content-center">
 
 	<div class="col-md-8">
-	
+
 		<div class="card">
 		
 			<div class="card-header bg-primary">
@@ -13,20 +16,34 @@
 			
 			<div class="card-body">
 
-				<form action="">
+				<form:form modelAttribute="statusUpdate">
 				
 					<div class="form-group">
-						<textarea name="text" class="form-control" rows="10"></textarea>
+						<form:textarea path="text" name="text" class="form-control" rows="10"></form:textarea>
 					</div>
 					
 					<button type="submit" class="btn btn-default">Add Status</button>				
 				
-				</form>
+				</form:form>
 
 			</div>
 		
 		</div>
-	
+		<hr>
+		<div class="card">
+		
+			<div class="card-header bg-primary">
+				<fmt:formatDate value="${latestStatusUpdate.added}" pattern="EEEE d MMMM y 'at' H:mm:s"/>
+			</div>
+			
+			<div class="card-body">
+
+				<c:out value="${latestStatusUpdate.text}" />
+
+			</div>			
+		
+		</div>
+		
 	</div>
 
 </div>

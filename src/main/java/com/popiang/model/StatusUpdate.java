@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,7 +19,6 @@ public class StatusUpdate {
 	@Id // annotation to indicate this field is the primary key in db
 	@Column(name = "id") // annotation of the name of this field in table
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // annotation to trigger program to auto generate value for this
-														// field
 	private Long id;
 
 	@Column(name = "text")
@@ -27,6 +27,12 @@ public class StatusUpdate {
 	@Column(name = "added")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date added;
+	
+	@PrePersist
+	public void onCreate() {
+		if(added == null)
+			added = new Date();
+	}
 
 	public StatusUpdate() {
 
@@ -34,7 +40,6 @@ public class StatusUpdate {
 
 	public StatusUpdate(String text) {
 		this.text = text;
-		added = new Date();
 	}
 
 	public StatusUpdate(String text, Date added) {
@@ -101,6 +106,11 @@ public class StatusUpdate {
 		} else if (!text.equals(other.text))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "StatusUpdate [id=" + id + ", text=" + text + ", added=" + added + "]";
 	}
 
 }

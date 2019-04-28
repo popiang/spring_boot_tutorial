@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: spring-boot-tutorial
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: shahril_ma
+Built-By: Pop
 Implementation-Vendor-Id: com.popiang
-Build-Jdk: 1.8.0_144
+Build-Jdk: 1.8.0_161
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/spring-boot-tutorial
 Created-By: Maven Integration for Eclipse
