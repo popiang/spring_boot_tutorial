@@ -11,6 +11,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "status_update")
@@ -21,6 +22,7 @@ public class StatusUpdate {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // annotation to trigger program to auto generate value for this
 	private Long id;
 
+	@NotBlank(message = "{addstatus.text.notblank}")
 	@Column(name = "text")
 	private String text;
 

@@ -17,6 +17,10 @@
 			<div class="card-body">
 
 				<form:form modelAttribute="statusUpdate">
+					
+					<div class="errors">
+						<form:errors path="text" />
+					</div>
 				
 					<div class="form-group">
 						<form:textarea path="text" name="text" class="form-control" rows="10"></form:textarea>

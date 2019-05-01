@@ -44,6 +44,9 @@
 				<li class="nav-item">
 					<a class="nav-link" href="${contextRoot}/addstatus">Add Status</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="${contextRoot}/viewstatus?p=1">View Status</a>
+				</li>
 			</ul>
 		</div>
 	</nav>

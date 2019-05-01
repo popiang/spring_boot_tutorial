@@ -12,3 +12,12 @@
 	font-weight: bold;
 	color: white;
 }
+
+.errors {
+	color: red;
+}
+
+.pagination {
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
