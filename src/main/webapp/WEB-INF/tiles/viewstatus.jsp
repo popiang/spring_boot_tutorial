@@ -10,7 +10,7 @@
 
 		<c:url var="url" value="/viewstatus" />
 	
-		<pop:pagination page="${page}" url="${url}" />
+		<pop:pagination page="${page}" url="${url}" size="4" />
 	
 		<c:forEach items="${page.content}" var="statusUpdate">
 
