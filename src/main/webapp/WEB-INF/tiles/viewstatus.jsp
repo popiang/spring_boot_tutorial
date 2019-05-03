@@ -14,6 +14,9 @@
 	
 		<c:forEach items="${page.content}" var="statusUpdate">
 
+			<c:url var="editLink" value="/editstatus?id=${statusUpdate.id}" />
+			<c:url var="deleteLink" value="/deletestatus?id=${statusUpdate.id}" />
+
 			<div class="card">
 
 				<div class="card-header bg-primary">
@@ -23,8 +26,14 @@
 
 				<div class="card-body">
 
-					<c:out value="${statusUpdate.text}" />
-
+					<div>
+						${statusUpdate.text}
+					</div>
+					
+					<div class="edit-links">
+						<a href="${editLink}">edit</a> | <a onclick="return confirm('Are you sure want to delete this status update?');" href="${deleteLink}">delete</a>
+					</div>
+					
 				</div>
 
 			</div><br>

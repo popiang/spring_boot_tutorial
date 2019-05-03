@@ -11,40 +11,28 @@
 		<div class="card">
 		
 			<div class="card-header bg-primary">
-				Add A Status Update
+				Edit A Status Update
 			</div>
 			
 			<div class="card-body">
 
 				<form:form modelAttribute="statusUpdate">
+				
+					<form:input path="id" type="hidden"/>
 					
 					<div class="errors">
 						<form:errors path="text" />
 					</div>
 				
 					<div class="form-group">
-						<form:textarea id="editor" path="text" name="text" class="form-control" rows="10"></form:textarea>
+						<form:textarea path="text" name="text" class="form-control" rows="10"></form:textarea>
 					</div>
 					
-					<button type="submit" class="btn btn-default">Add Status</button>				
+					<button type="submit" class="btn btn-default">Save Status</button>				
 				
 				</form:form>
 
 			</div>
-		
-		</div>
-		<hr>
-		<div class="card">
-		
-			<div class="card-header bg-primary">
-				<fmt:formatDate value="${latestStatusUpdate.added}" pattern="EEEE d MMMM y 'at' H:mm:s"/>
-			</div>
-			
-			<div class="card-body">
-	
-				${latestStatusUpdate.text}
-
-			</div>			
 		
 		</div>
 		
@@ -52,7 +40,11 @@
 
 </div>
 
+ <script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
  <script>
- $('#editor').trumbowyg();
+ 	tinymce.init({
+ 		selector:'textarea',
+ 		plugins: 'link'
+ 	});
  </script>
     

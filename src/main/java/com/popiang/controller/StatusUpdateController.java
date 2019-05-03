@@ -1,5 +1,7 @@
 package com.popiang.controller;
 
+import java.util.Date;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +64,41 @@ public class StatusUpdateController {
 		
 		return modelAndView;
 	}	
+	
+	@RequestMapping(value = "/deletestatus", method = RequestMethod.GET)
+	public ModelAndView deleteStatus(ModelAndView modelAndView, @RequestParam(name = "id") Long id) {		
+		
+		service.delete(id);
+		
+		modelAndView.setViewName("redirect:/viewstatus");
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/editstatus", method = RequestMethod.GET)
+	public ModelAndView editStatus(ModelAndView modelAndView, @RequestParam(name = "id") Long id) {
+		
+		StatusUpdate statusUpdate = service.get(id);
+		
+		modelAndView.getModel().put("statusUpdate", statusUpdate);
+		
+		modelAndView.setViewName("app.editstatus");
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/editstatus", method = RequestMethod.POST)
+	public ModelAndView editStatus(ModelAndView modelAndView, @Valid StatusUpdate statusUpdate, BindingResult result) {
+		
+		modelAndView.setViewName("app.editstatus");
+		
+		if(!result.hasErrors()) {
+			statusUpdate.setAdded(new Date());
+			service.save(statusUpdate);
+			modelAndView.setViewName("redirect:/viewstatus");
+		}
+		
+		return modelAndView;
+	}
 	
 }

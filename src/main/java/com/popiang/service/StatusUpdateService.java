@@ -12,7 +12,7 @@ import com.popiang.model.StatusUpdateDao;
 @Service
 public class StatusUpdateService {
 
-	private final static int PAGESIZE = 3;
+	private final static int PAGESIZE = 5;
 	
 	@Autowired
 	private StatusUpdateDao dao;
@@ -26,10 +26,15 @@ public class StatusUpdateService {
 	}
 	
 	public Page<StatusUpdate> getPage(int pageNumber) {
-		
 		PageRequest request = PageRequest.of(pageNumber - 1, PAGESIZE, Sort.Direction.DESC, "added");
-		
 		return dao.findAll(request);
-		
+	}
+
+	public void delete(Long id) {
+		dao.deleteById(id);
+	}
+
+	public StatusUpdate get(Long id) {
+		return dao.findById(id).get();
 	}
 }

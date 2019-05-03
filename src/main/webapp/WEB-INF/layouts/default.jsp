@@ -16,7 +16,7 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+<link rel="stylesheet" href="trumbowyg/dist/ui/trumbowyg.css">
 <link rel="stylesheet" href="${contextRoot}/css/main.css">
 
 <title><tiles:insertAttribute name="title" /></title>
@@ -25,7 +25,7 @@
 
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-dark navbar-dark">
+	<nav class="navbar navbar-expand-lg navbar-light bg-dark navbar-dark py-1">
 		<a class="navbar-brand" href="${contextRoot}/">Spring Boot Tutorial</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -41,13 +41,16 @@
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li class="nav-item">
-					<a class="nav-link" href="${contextRoot}/addstatus">Add Status</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="${contextRoot}/viewstatus?p=1">View Status</a>
-				</li>
-			</ul>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Status
+					</a>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="${contextRoot}/addstatus">Add Status</a>
+						<a class="dropdown-item" href="${contextRoot}/viewstatus">View Status</a>
+					</div>
+				</li>	
+			</ul>			
 		</div>
 	</nav>
 	
@@ -68,6 +71,11 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
+		
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>		
+		
+	<script src="trumbowyg/dist/trumbowyg.js"></script>
 
 </body>
 </html>
