@@ -36,9 +36,17 @@
 
 		<div class="login-form">
 		
-			<form action="/examples/actions/confirmation.php" method="post">
+			<form action="${loginUrl}" method="post">
+		
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		
 				<h2 class="text-center">Please Log in</h2>
+				
+				<c:if test="${param.error != null}">
+				    <div class="alert alert-danger" role="alert">
+						Invalid username or password!
+					</div>
+				</c:if>
 		
 				<div class="form-group">
 					<input name="username" type="text" class="form-control" placeholder="Username" required="required">
@@ -54,20 +62,7 @@
 					</button>
 				</div>
 		
-				<div class="clearfix">
-					<label class="pull-left checkbox-inline">
-						<input type="checkbox"> Remember me
-					</label> 
-					<a href="#" class="pull-right">
-						Forgot Password?
-					</a>
-				</div>
-		
 			</form>
-		
-			<p class="text-center">
-				<a href="#">Create an Account</a>
-			</p>
 		
 		</div>
 

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
 <!DOCTYPE html>
 <html>
@@ -16,7 +17,6 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<link rel="stylesheet" href="trumbowyg/dist/ui/trumbowyg.css">
 <link rel="stylesheet" href="${contextRoot}/css/main.css">
 
 <title><tiles:insertAttribute name="title" /></title>
@@ -41,18 +41,36 @@
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Status
-					</a>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="${contextRoot}/addstatus">Add Status</a>
-						<a class="dropdown-item" href="${contextRoot}/viewstatus">View Status</a>
-					</div>
-				</li>	
+			
+				<sec:authorize access="!isAuthenticated()">
+					<li class="nav-item">
+						<a class="nav-link" href="${contextRoot}/login">Login</a>
+					</li>
+				</sec:authorize>
+			
+				<sec:authorize access="isAuthenticated()">
+					<li class="nav-item">
+						<a class="nav-link" href="javascript:$('#logoutForm').submit();">Logout</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Status
+						</a>
+						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="${contextRoot}/addstatus">Add Status</a>
+							<a class="dropdown-item" href="${contextRoot}/viewstatus">View Status</a>
+						</div>
+					</li>	
+				</sec:authorize>
+			
 			</ul>			
 		</div>
 	</nav>
+	
+	<c:url var="logoutLink" value="/logout" />
+	<form id="logoutForm" action="${logoutLink}" method="post">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+	</form>
 	
 	<div class="container main-container">
 		<tiles:insertAttribute name="content" />
@@ -75,7 +93,7 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>		
 		
-	<script src="trumbowyg/dist/trumbowyg.js"></script>
+
 
 </body>
 </html>

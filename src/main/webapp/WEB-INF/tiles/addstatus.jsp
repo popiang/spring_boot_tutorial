@@ -52,7 +52,4 @@
 
 </div>
 
- <script>
- $('#editor').trumbowyg();
- </script>
     
