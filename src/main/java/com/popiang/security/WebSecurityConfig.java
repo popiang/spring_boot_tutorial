@@ -9,10 +9,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.popiang.service.UserService;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private UserService userService;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
@@ -51,6 +56,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.roles("USER");
 		
 		// @formatter:on
+	}
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		
+		auth.userDetailsService(userService);
+		
 	}
 	
 }
