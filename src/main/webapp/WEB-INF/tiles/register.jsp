@@ -35,7 +35,10 @@
 	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 
 		<div class="login-form">
-		
+			<c:set var="rpError">
+				<form:errors path="siteUser" class="errors" />
+			</c:set>
+			
 			<form:form modelAttribute="siteUser" method="post">
 		
 				<h2 class="text-center">Create An Account</h2>
@@ -56,8 +59,10 @@
 					<form:input path="repeatPassword" type="password" class="form-control" placeholder="Repeat Password" required="required" />
 				</div>		
 				
-				<form:errors path="repeatPassword" class="errors" />		
-		
+				<c:if test="${not empty rpError}">
+					<form:errors cssClass="errors">${rpError}</form:errors>	
+				</c:if>
+				
 				<div class="form-group m-10-top">
 					<button type="submit" class="btn btn-primary btn-block">
 						Register

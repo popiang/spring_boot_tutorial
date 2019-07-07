@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.popiang.model.SiteUser;
+import com.popiang.service.EmailService;
 import com.popiang.service.UserService;
 
 @Controller
@@ -18,9 +19,17 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	@RequestMapping("/login")
 	public String login() {
 		return "app.login";
+	}
+	
+	@RequestMapping("/verifyemail")
+	public String verifyEmail() {
+		return "app.verifyemail";
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -41,7 +50,8 @@ public class AuthController {
 		
 		if(!result.hasErrors()) {
 			userService.register(siteUser);
-			modelAndView.setViewName("redirect:/");
+			emailService.sendVerificationEmail(siteUser.getEmail());
+			modelAndView.setViewName("redirect:/verifyemail");
 		}
 		
 		return modelAndView;

@@ -15,7 +15,7 @@ import com.popiang.validation.PasswordMatch;
 
 @Entity
 @Table(name = "users")
-@PasswordMatch(message = "Password x sama afasdfasdf asdfasdfasdf asdfasdfadsf")
+@PasswordMatch(message = "{register.repeatpassword.mismatch}")
 public class SiteUser {
 
 	@Id
