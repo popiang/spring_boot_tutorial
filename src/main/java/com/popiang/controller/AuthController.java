@@ -26,21 +26,21 @@ public class AuthController {
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView register(ModelAndView modelAndView) {
 		
-		SiteUser user = new SiteUser();
+		SiteUser siteUser = new SiteUser();
 		
-		modelAndView.getModel().put("user", user);
+		modelAndView.getModel().put("siteUser", siteUser);
 		modelAndView.setViewName("app.register");
 		
 		return modelAndView;
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ModelAndView register(ModelAndView modelAndView, @Valid SiteUser user, BindingResult result) {
+	public ModelAndView register(ModelAndView modelAndView, @Valid SiteUser siteUser, BindingResult result) {
 
 		modelAndView.setViewName("app.register");
 		
 		if(!result.hasErrors()) {
-			userService.register(user);
+			userService.register(siteUser);
 			modelAndView.setViewName("redirect:/");
 		}
 		

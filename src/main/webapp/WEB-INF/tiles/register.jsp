@@ -36,23 +36,29 @@
 
 		<div class="login-form">
 		
-			<form:form modelAttribute="user" method="post">
+			<form:form modelAttribute="siteUser" method="post">
 		
 				<h2 class="text-center">Create An Account</h2>
-				
-				<div class="form-group">
+												
+				<div class="form-group m-0-bottom">
 					<form:input path="email" type="text" class="form-control" placeholder="Email" required="required" />
 				</div>
+
+				<form:errors path='email' class="errors" />
 		
-				<div class="form-group">
-					<form:input path="password" type="password" class="form-control" placeholder="Password" required="required" />
+				<div class="form-group m-10-top m-0-bottom">
+					<form:input path="plainPassword" type="password" class="form-control" placeholder="Password" required="required" />
 				</div>
+
+				<form:errors path='plainPassword' class="errors" />
 				
-				<div class="form-group">
-					<input name="repeatpassword" type="password" class="form-control" placeholder="Repeat Password" required="required" />
-				</div>				
+				<div class="form-group m-10-top m-0-bottom">
+					<form:input path="repeatPassword" type="password" class="form-control" placeholder="Repeat Password" required="required" />
+				</div>		
+				
+				<form:errors path="repeatPassword" class="errors" />		
 		
-				<div class="form-group">
+				<div class="form-group m-10-top">
 					<button type="submit" class="btn btn-primary btn-block">
 						Register
 					</button>

@@ -18,6 +18,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
@@ -27,8 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/", "/about", "/register", "/js/**", "/css/**", "/img/**")
 				.permitAll()
-			.anyRequest()
-				.authenticated()
+				.antMatchers("/addstatus", "/viewstatus", "/deletestatus", "/editstatus")
+				.hasRole("ADMIN")
 				.and()
 			.formLogin()
 				.loginPage("/login")
@@ -61,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
-		auth.userDetailsService(userService);
+		auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
 		
 	}
 	

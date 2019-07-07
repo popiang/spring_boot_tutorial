@@ -14,7 +14,9 @@
 }
 
 .errors {
-	color: red;
+	color: #bd2130;
+	display: block;
+	padding-left: 13px;
 }
 
 .pagination {
@@ -30,4 +32,12 @@
 
 .edit-links {
 	margin-top: 10px;
+}
+
+.m-0-bottom {
+    margin-bottom: 0 !important;
+}
+
+.m-10-top {
+	margin-top: 16px !important;
 }

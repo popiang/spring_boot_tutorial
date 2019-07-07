@@ -46,12 +46,18 @@
 					<li class="nav-item">
 						<a class="nav-link" href="${contextRoot}/login">Login</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="${contextRoot}/register">Register</a>
+					</li>
 				</sec:authorize>
 			
 				<sec:authorize access="isAuthenticated()">
 					<li class="nav-item">
 						<a class="nav-link" href="javascript:$('#logoutForm').submit();">Logout</a>
 					</li>
+				</sec:authorize>
+				
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							Status
