@@ -28,6 +28,9 @@ public class SiteUser {
 	@NotBlank(message = "{register.email.invalid}")
 	private String email;
 	
+	@Column(name = "enabled")
+	private Boolean enabled = false;
+	
 	@Column(name = "password")
 	private String password;
 	
@@ -88,6 +91,14 @@ public class SiteUser {
 
 	public void setRepeatPassword(String repeatPassword) {
 		this.repeatPassword = repeatPassword;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 	
 }

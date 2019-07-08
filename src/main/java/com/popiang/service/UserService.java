@@ -1,6 +1,7 @@
 package com.popiang.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.popiang.model.SiteUser;
+import com.popiang.model.TokenType;
 import com.popiang.model.UserDao;
+import com.popiang.model.VerificationDao;
+import com.popiang.model.VerificationToken;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -22,11 +26,18 @@ public class UserService implements UserDetailsService {
 	private UserDao userDao;
 	
 	@Autowired
+	private VerificationDao verificationDao;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	public void register(SiteUser user) {
 		user.setRole("ROLE_USER");
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		userDao.save(user);
+	}
+	
+	public void save(SiteUser user) {
 		userDao.save(user);
 	}
 
@@ -43,8 +54,26 @@ public class UserService implements UserDetailsService {
 		
 		String password = user.getPassword();
 		
-		return new User(email, password, auth);
+		Boolean enabled = user.getEnabled();
+		
+		return new User(email, password, enabled, true, true, true, auth);
 		
 	}
 	
+	public String createEmailVerificationToken(SiteUser user) {
+
+		VerificationToken token = new VerificationToken(UUID.randomUUID().toString(), user, TokenType.REGISTER);
+		verificationDao.save(token);
+		return token.getToken();
+		
+	}
+	
+	public VerificationToken getVerificationToken(String token) {
+		return verificationDao.findByToken(token);
+	}
+	
 }
+
+
+
+

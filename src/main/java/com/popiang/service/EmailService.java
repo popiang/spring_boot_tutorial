@@ -11,15 +11,34 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Service
 public class EmailService {
 
+	private TemplateEngine templateEngine;
+	
 	@Autowired
 	private JavaMailSender mailSender;
 	
 	@Value("${mail.enable}")
 	private Boolean enable;
+	
+	@Autowired
+	public EmailService(TemplateEngine templateEngine) {
+		
+		ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+		
+		templateResolver.setPrefix("mail/");
+		templateResolver.setSuffix(".html");
+		templateResolver.setTemplateMode("HTML5");
+		templateResolver.setCacheable(false);
+		templateEngine.setTemplateResolver(templateResolver);
+		
+		this.templateEngine = templateEngine;
+	}
 	
 	private void send(MimeMessagePreparator preparator) {
 		
@@ -31,10 +50,13 @@ public class EmailService {
 	
 	public void sendVerificationEmail(String emailAddress) {
 		
-		StringBuilder sb = new StringBuilder();
-		sb.append("<HTML>");
-		sb.append("<p>Hello there. This is <strong>HTML</strong></p>");
-		sb.append("</HTML>");
+		Context context = new Context();
+		
+		context.setVariable("name", "Shahril");
+		
+		String emailContents = templateEngine.process("verifyemail", context);
+		
+		System.out.println(emailContents);
 		
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			
@@ -48,7 +70,7 @@ public class EmailService {
 				message.setSubject("Verify Your Email Address");
 				message.setSentDate(new Date());
 				
-				message.setText(sb.toString(), true);
+				message.setText(emailContents, true);
 				
 			}
 			
