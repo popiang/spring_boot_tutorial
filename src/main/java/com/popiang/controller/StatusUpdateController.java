@@ -23,18 +23,22 @@ public class StatusUpdateController {
 	@Autowired
 	private StatusUpdateService service;
 	
+	//
+	// display add status page, display also the latest update
+	//
 	@RequestMapping(value = "/addstatus", method = RequestMethod.GET)
 	public ModelAndView addStatus(ModelAndView modelAndView, @ModelAttribute("statusUpdate") StatusUpdate statusUpdate) {
 		
 		modelAndView.setViewName("app.addstatus");
-		
 		StatusUpdate latestStatusUpdate = service.getLatest();
-		
 		modelAndView.addObject("latestStatusUpdate", latestStatusUpdate);
-		
+
 		return modelAndView;
 	}
 	
+	//
+	// process add status, validate data, save the status then redirect to view status page
+	//
 	@RequestMapping(value = "/addstatus", method = RequestMethod.POST)
 	public ModelAndView addStatus(ModelAndView modelAndView, @Valid StatusUpdate statusUpdate, BindingResult result) {
 		
@@ -53,40 +57,47 @@ public class StatusUpdateController {
 		return modelAndView;
 	}	
 	
+	//
+	// display view status page base on page number
+	//
 	@RequestMapping(value = "/viewstatus", method = RequestMethod.GET)
 	public ModelAndView viewStatus(ModelAndView modelAndView, @RequestParam(name = "p", defaultValue = "1") int pageNumber) {
 		
 		Page<StatusUpdate> page = service.getPage(pageNumber);
-		
 		modelAndView.getModel().put("page", page);
-		
 		modelAndView.setViewName("app.viewstatus");
 		
 		return modelAndView;
 	}	
 	
+	//
+	// delete status base on status id, then redirect to view status page
+	//
 	@RequestMapping(value = "/deletestatus", method = RequestMethod.GET)
 	public ModelAndView deleteStatus(ModelAndView modelAndView, @RequestParam(name = "id") Long id) {		
 		
 		service.delete(id);
-		
 		modelAndView.setViewName("redirect:/viewstatus");
 		
 		return modelAndView;
 	}
 	
+	//
+	// display edit status page and send along status to edit base on status id
+	//
 	@RequestMapping(value = "/editstatus", method = RequestMethod.GET)
 	public ModelAndView editStatus(ModelAndView modelAndView, @RequestParam(name = "id") Long id) {
 		
 		StatusUpdate statusUpdate = service.get(id);
-		
 		modelAndView.getModel().put("statusUpdate", statusUpdate);
-		
 		modelAndView.setViewName("app.editstatus");
 		
 		return modelAndView;
 	}
 	
+	//
+	// process edit status, validate data, save the updated status 
+	//
 	@RequestMapping(value = "/editstatus", method = RequestMethod.POST)
 	public ModelAndView editStatus(ModelAndView modelAndView, @Valid StatusUpdate statusUpdate, BindingResult result) {
 		

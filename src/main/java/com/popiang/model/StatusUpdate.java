@@ -17,9 +17,9 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "status_update")
 public class StatusUpdate {
 
-	@Id // annotation to indicate this field is the primary key in db
-	@Column(name = "id") // annotation of the name of this field in table
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // annotation to trigger program to auto generate value for this
+	@Id 
+	@Column(name = "id") 
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long id;
 
 	@NotBlank(message = "{addstatus.text.notblank}")

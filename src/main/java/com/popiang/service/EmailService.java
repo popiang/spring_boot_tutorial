@@ -70,7 +70,7 @@ public class EmailService {
 				message.setSubject("Verify Your Email Address");
 				message.setSentDate(new Date());
 				
-				message.setText(emailContents, true);
+				message.setText("<html>woiiii!!!</html>", true);
 				
 			}
 			

@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.popiang.service.UserService;
@@ -28,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http
 			.authorizeRequests()
-				.antMatchers("/", "/about", "/register", "/js/**", "/css/**", "/img/**")
+				.antMatchers("/", "/about", "/register", "/registrationconfirmed", "/js/**", "/css/**", "/img/**")
 				.permitAll()
 				.antMatchers("/addstatus", "/viewstatus", "/deletestatus", "/editstatus")
 				.hasRole("ADMIN")
@@ -45,25 +44,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	}
 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		
-		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		
-		// @formatter:off
-		
-		auth
-			.inMemoryAuthentication()
-			.withUser("shahril")
-			.password(encoder.encode("hello"))
-			.roles("USER");
-		
-		// @formatter:on
-	}
+//	@Autowired
+//	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//		
+//		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//		
+//		// @formatter:off
+//		
+//		auth
+//			.inMemoryAuthentication()
+//			.withUser("shahril")
+//			.password(encoder.encode("hello"))
+//			.roles("USER");
+//		
+//		// @formatter:on
+//	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
+		// managing user service for authentication			// encode the password
 		auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
 		
 	}

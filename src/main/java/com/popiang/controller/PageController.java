@@ -14,18 +14,22 @@ public class PageController {
 	@Autowired
 	private StatusUpdateService service;
 	
+	//
+	// display landing page after registration, display latest update
+	//
 	@RequestMapping("/")
 	public ModelAndView home(ModelAndView modelAndView) {
 		
 		StatusUpdate statusUpdate = service.getLatest();
-		
 		modelAndView.getModel().put("statusUpdate", statusUpdate);
-		
 		modelAndView.setViewName("app.homepage");
-		
+
 		return modelAndView;
 	}
 
+	//
+	// display about page
+	//
 	@RequestMapping("/about")
 	public String about() {
 		return "app.about";
