@@ -13,12 +13,11 @@ public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch
 		String plainPassword = siteUser.getPlainPassword();
 		String repeatPassword = siteUser.getRepeatPassword();
 		
-//		if(plainPassword == null || plainPassword.length() == 0) {
-//			return true;
-//		}
+		if(plainPassword == null || plainPassword.length() == 0) {
+			return true;
+		}
 		
 		if(!plainPassword.equals(repeatPassword)) {
-			System.out.println("Passwords x sama!!!");
 			return false;
 		}
 		

@@ -26,6 +26,9 @@ public class EmailService {
 	@Value("${mail.enable}")
 	private Boolean enable;
 	
+	@Value("${site.url}")
+	private String url;	
+	
 	@Autowired
 	public EmailService(TemplateEngine templateEngine) {
 		
@@ -48,11 +51,18 @@ public class EmailService {
 		
 	}
 	
-	public void sendVerificationEmail(String emailAddress) {
+	public void sendVerificationEmail(String emailAddress, String token) {
+		
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		Context context = new Context();
 		
-		context.setVariable("name", "Shahril");
+		context.setVariable("token", token);
+		context.setVariable("url", url);
 		
 		String emailContents = templateEngine.process("verifyemail", context);
 		
@@ -70,7 +80,7 @@ public class EmailService {
 				message.setSubject("Verify Your Email Address");
 				message.setSentDate(new Date());
 				
-				message.setText("<html>woiiii!!!</html>", true);
+				message.setText(emailContents, true);
 				
 			}
 			

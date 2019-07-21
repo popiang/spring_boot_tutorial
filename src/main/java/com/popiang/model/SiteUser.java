@@ -100,5 +100,11 @@ public class SiteUser {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
+
+	@Override
+	public String toString() {
+		return "SiteUser [id=" + id + ", email=" + email + ", enabled=" + enabled + ", password=" + password
+				+ ", plainPassword=" + plainPassword + ", repeatPassword=" + repeatPassword + ", role=" + role + "]";
+	}
 	
 }

@@ -1,5 +1,8 @@
 package com.popiang.controller;
 
+import java.io.FileNotFoundException;
+import java.util.Date;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.popiang.model.SiteUser;
+import com.popiang.model.VerificationToken;
 import com.popiang.service.EmailService;
 import com.popiang.service.UserService;
 
@@ -38,7 +43,7 @@ public class AuthController {
 		return "app.login";
 	}
 	
-	// display verifyemail page after successful registration
+	// display verify email page after successful registration
 	@RequestMapping("/verifyemail")
 	public String verifyEmail() {
 		return "app.verifyemail";
@@ -69,11 +74,39 @@ public class AuthController {
 	//
 	// divert to message page and display registration confirmed message
 	//	
-	@RequestMapping("/registrationconfirmed")
-	public ModelAndView registrationConfirmed(ModelAndView modelAndView) {
+	@RequestMapping("/confirmregister")
+	public ModelAndView registrationConfirmed(ModelAndView modelAndView, @RequestParam("t") String stringToken) {
+		
+		VerificationToken token = userService.getVerificationToken(stringToken);
+		
+		if(token == null) {
+			modelAndView.setViewName("redirect:/invaliduser");
+			return modelAndView;
+		}
+		
+		Date expiryDate = token.getExpiry();
+		
+		if(expiryDate.before(new Date())) {
+			modelAndView.setViewName("redirect:/expiredtoken");
+			userService.deleteToken(token);
+			return modelAndView;
+		}
+		
+		SiteUser siteUser = token.getUser();
+		
+		if(siteUser == null) {
+			modelAndView.setViewName("redirect:/invaliduser");
+			userService.deleteToken(token);
+			return modelAndView;
+		}
+		
+		userService.deleteToken(token);
+		siteUser.setEnabled(true);
+		userService.save(siteUser);
 		
 		modelAndView.getModel().put("message", registrationConfirmedMessage);
 		modelAndView.setViewName("app.message");
+		
 		return modelAndView;
 	}	
 	
@@ -81,7 +114,10 @@ public class AuthController {
 	// divert control to registration page & sending along a siteuser model for the form
 	//
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public ModelAndView register(ModelAndView modelAndView) {
+	public ModelAndView register(ModelAndView modelAndView) throws FileNotFoundException {
+		
+		if(true)
+			throw new FileNotFoundException("This is AWESOME exception");
 		
 		SiteUser siteUser = new SiteUser();
 		
@@ -102,11 +138,12 @@ public class AuthController {
 		
 		if(!result.hasErrors()) {
 			userService.register(siteUser);
-			emailService.sendVerificationEmail(siteUser.getEmail());
+			
+			String token = userService.createEmailVerificationToken(siteUser);
+			
+			emailService.sendVerificationEmail(siteUser.getEmail(), token);
 			modelAndView.setViewName("redirect:/verifyemail");
 			
-			siteUser.setEnabled(true);
-			userService.save(siteUser);
 		}
 		
 		return modelAndView;
