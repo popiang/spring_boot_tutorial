@@ -8,9 +8,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ErrorController {
 
+	// setting the error message
 	@Value("${message.access.denied}")
 	private String accessDeniedMessage;
 
+	//
+	// handling access denied error
+	//
 	@RequestMapping("/403")
 	public ModelAndView accessDenied(ModelAndView modelAndView) {
 		

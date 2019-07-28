@@ -10,6 +10,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import org.owasp.html.PolicyFactory;
+
 @Entity
 @Table(name = "profile")
 public class Profile {
@@ -51,15 +53,21 @@ public class Profile {
 		this.about = about;
 	}
 	
+	//
+	// security measure to avoid sensitive user info leaked to public
+	//
 	public void safeCopyFrom(Profile other) {
 		if(other.about != null) {
 			this.about = other.about;
 		}
 	}
 
-	public void setMergeFrom(Profile webProfile) {
+	//
+	// updating profile after sanitize the html using policyFactory
+	//
+	public void setMergeFrom(Profile webProfile, PolicyFactory policyFactory) {
 		if(webProfile.about != null) {
-			this.about = webProfile.about;
+			this.about = policyFactory.sanitize(webProfile.about);
 		}
 	}
 }

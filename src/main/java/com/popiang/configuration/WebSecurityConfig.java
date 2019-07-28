@@ -10,6 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.popiang.service.UserService;
 
+
+//
+// this class is the configuration of the security of access
+//
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -38,9 +42,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 							 "/css/**", 
 							 "/img/**")
 				.permitAll()
-				.antMatchers("/addstatus", "/viewstatus", "/deletestatus", "/editstatus")
+				.antMatchers("/addstatus", 
+							 "/viewstatus", 
+							 "/deletestatus", 
+							 "/editstatus")
 				.hasRole("ADMIN")
-				.antMatchers("/profile", "/edit-profile-about")
+				.antMatchers("/profile", 
+							 "/edit-profile-about")
 				.authenticated()
 				.anyRequest()
 				.denyAll()
@@ -56,22 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// @formatter:on
 
 	}
-
-//	@Autowired
-//	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//		
-//		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//		
-//		// @formatter:off
-//		
-//		auth
-//			.inMemoryAuthentication()
-//			.withUser("shahril")
-//			.password(encoder.encode("hello"))
-//			.roles("USER");
-//		
-//		// @formatter:on
-//	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {

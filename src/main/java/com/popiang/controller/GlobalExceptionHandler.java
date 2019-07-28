@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+//
+// handling global exceptions
+//
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
@@ -17,6 +20,9 @@ public class GlobalExceptionHandler {
 	@Value("${message.duplicate.user.exception}")
 	private String duplicateUserMessage;
 
+	//
+	// handling default exceptions
+	//
 	@ExceptionHandler(value = Exception.class)
 	public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
 		
@@ -31,6 +37,9 @@ public class GlobalExceptionHandler {
 		
 	}
 	
+	//
+	// handling duplicate user error during registration
+	//
 	@ExceptionHandler(value = DataIntegrityViolationException.class)
 	public ModelAndView duplicateUserErrorHandler(HttpServletRequest req, Exception e) {
 		

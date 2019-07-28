@@ -1,5 +1,7 @@
 package com.popiang;
 
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.server.ErrorPage;
@@ -55,6 +57,9 @@ public class App {
 		return new BCryptPasswordEncoder();
 	}
 	
+	//
+	// bean to handle forbidden access error
+	//
 	@Bean
 	public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> errorHandler() {
 		
@@ -71,4 +76,19 @@ public class App {
 		
 	}
 	
+	//
+	// bean to set html policy, setting what html elements are allowed
+	// used in textarea in profile about
+	// other then the allowed belows will be filtered out
+	//
+	@Bean
+	public PolicyFactory getUserHtmlPolicy() {
+		return new HtmlPolicyBuilder()
+				.allowCommonBlockElements()				// html common blocks
+				.allowCommonInlineFormattingElements()	// html common inline formatting elements
+				.toFactory();
+	}
+	
 }
+
+

@@ -2,6 +2,7 @@ package com.popiang.controller;
 
 import javax.validation.Valid;
 
+import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,9 @@ import com.popiang.model.SiteUser;
 import com.popiang.service.ProfileService;
 import com.popiang.service.UserService;
 
+//
+// controller handling profile activities
+//
 @Controller
 public class ProfileController {
 
@@ -25,6 +29,12 @@ public class ProfileController {
 	@Autowired
 	private ProfileService profileService;
 	
+	@Autowired
+	private PolicyFactory policyFactory;
+	
+	//
+	// private method to get current authenticated user
+	//
 	private SiteUser getUser() {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -33,18 +43,23 @@ public class ProfileController {
 		return userService.getUser(email);
 	}
 
+	//
+	// showing profile page of current user
+	//
 	@RequestMapping("/profile")
 	public ModelAndView showProfile(ModelAndView modelAndView) {
 	
 		SiteUser user = getUser();
 		Profile profile = profileService.getProfile(user);
 		
+		// for newly registered user which profile is not created yet
 		if(profile == null) {
 			profile = new Profile();
 			profile.setUser(user);
 			profileService.saveProfile(profile);
 		}
 		
+		// security measure to avoid sensitive info leaked to public
 		Profile webProfile = new Profile();
 		webProfile.safeCopyFrom(profile);
 		
@@ -54,6 +69,9 @@ public class ProfileController {
 		return modelAndView;
 	}
 	
+	//
+	// showing edit profile page
+	//
 	@RequestMapping(value = "/edit-profile-about", method = RequestMethod.GET)
 	public ModelAndView editProfileAbout(ModelAndView modelAndView) {
 
@@ -69,6 +87,9 @@ public class ProfileController {
 		return modelAndView;
 	}
 	
+	//
+	// processing edit profile page
+	//
 	@RequestMapping(value = "/edit-profile-about", method = RequestMethod.POST)
 	public ModelAndView editProfileAbout(ModelAndView modelAndView, @Valid Profile webProfile, BindingResult result) {
 
@@ -77,8 +98,10 @@ public class ProfileController {
 		SiteUser user = getUser();
 		Profile profile = profileService.getProfile(user);
 
-		profile.setMergeFrom(webProfile);
+		// security measure to sanitize html before updating current user profile
+		profile.setMergeFrom(webProfile, policyFactory);
 
+		// updating profile of current user is there's no error
 		if(!result.hasErrors()) {
 			profileService.saveProfile(profile);
 			modelAndView.setViewName("redirect:/profile");

@@ -5,6 +5,9 @@ import javax.validation.ConstraintValidatorContext;
 
 import com.popiang.model.SiteUser;
 
+//
+// custom password validation class
+//
 public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch, SiteUser> {
 
 	@Override

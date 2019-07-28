@@ -23,7 +23,7 @@
 						Click 'edit' to add information about yourself in the profile
 					</c:when>
 					<c:otherwise>
-						<c:out value="${profile.about}" />
+						${profile.about}
 					</c:otherwise>
 				</c:choose>
 
