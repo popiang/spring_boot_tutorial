@@ -41,3 +41,25 @@
 .m-10-top {
 	margin-top: 16px !important;
 }
+
+.profile-about {
+	width: 100%;
+	border: 1px solid gray;
+	padding: 20px;
+	overflow: auto;
+}
+
+.profile-img {
+	float: left;
+	margin-right: 10px;	
+}
+
+.profile-about-edit {
+	position: absolute;
+	bottom: 5px;
+	right: 35px;
+}
+
+
+
+

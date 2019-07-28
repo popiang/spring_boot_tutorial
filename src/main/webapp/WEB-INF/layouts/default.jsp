@@ -53,8 +53,11 @@
 			
 				<sec:authorize access="isAuthenticated()">
 					<li class="nav-item">
-						<a class="nav-link" href="javascript:$('#logoutForm').submit();">Logout</a>
+						<a class="nav-link" href="${contextRoot}/profile">Profile</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="javascript:$('#logoutForm').submit();">Logout</a>
+					</li>					
 				</sec:authorize>
 				
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -98,8 +101,9 @@
 		
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>		
-		
-
 
 </body>
 </html>
+
+
+

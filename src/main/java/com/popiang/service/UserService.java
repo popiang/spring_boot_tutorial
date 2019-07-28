@@ -75,6 +75,10 @@ public class UserService implements UserDetailsService {
 	public void deleteToken(VerificationToken token) {
 		verificationDao.delete(token);
 	}
+
+	public SiteUser getUser(String email) {
+		return userDao.findByEmail(email);
+	}
 	
 }
 

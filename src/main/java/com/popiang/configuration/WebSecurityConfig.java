@@ -40,6 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 				.antMatchers("/addstatus", "/viewstatus", "/deletestatus", "/editstatus")
 				.hasRole("ADMIN")
+				.antMatchers("/profile", "/edit-profile-about")
+				.authenticated()
 				.anyRequest()
 				.denyAll()
 				.and()
