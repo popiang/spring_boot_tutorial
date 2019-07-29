@@ -20,14 +20,23 @@ public class Profile {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Long id;
-	
+
 	@OneToOne(targetEntity = SiteUser.class)
 	@JoinColumn(name = "user_id", nullable = false)
 	private SiteUser user;
-	
+
 	@Column(name = "about", length = 5000)
 	@Size(max = 5000, message = "{profile.about.size}")
 	private String about;
+
+	@Column(name = "photo_name", length = 10)
+	private String photoName;
+
+	@Column(name = "photo_extension", length = 5)
+	private String photoExtension;
+
+	@Column(name = "photo_directory", length = 10)
+	private String photoDirectory;
 
 	public Long getId() {
 		return id;
@@ -52,12 +61,36 @@ public class Profile {
 	public void setAbout(String about) {
 		this.about = about;
 	}
-	
+
+	public String getPhotoName() {
+		return photoName;
+	}
+
+	public void setPhotoName(String photoName) {
+		this.photoName = photoName;
+	}
+
+	public String getPhotoExtension() {
+		return photoExtension;
+	}
+
+	public void setPhotoExtension(String photoExtension) {
+		this.photoExtension = photoExtension;
+	}
+
+	public String getPhotoDirectory() {
+		return photoDirectory;
+	}
+
+	public void setPhotoDirectory(String photoDirectory) {
+		this.photoDirectory = photoDirectory;
+	}
+
 	//
 	// security measure to avoid sensitive user info leaked to public
 	//
 	public void safeCopyFrom(Profile other) {
-		if(other.about != null) {
+		if (other.about != null) {
 			this.about = other.about;
 		}
 	}
@@ -66,8 +99,17 @@ public class Profile {
 	// updating profile after sanitize the html using policyFactory
 	//
 	public void setMergeFrom(Profile webProfile, PolicyFactory policyFactory) {
-		if(webProfile.about != null) {
+		if (webProfile.about != null) {
 			this.about = policyFactory.sanitize(webProfile.about);
 		}
+	}
+	
+	//
+	// setting photo info into respective variables
+	//
+	public void saveFileInfo(FileInfo fileInfo) {
+		this.photoName = fileInfo.getBasename();
+		this.photoExtension = fileInfo.getExtension();
+		this.photoDirectory = fileInfo.getSubDirectory();
 	}
 }

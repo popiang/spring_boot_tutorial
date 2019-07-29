@@ -1,5 +1,7 @@
 package com.popiang.controller;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.owasp.html.PolicyFactory;
@@ -11,15 +13,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.popiang.exceptions.InvalidFileException;
+import com.popiang.model.FileInfo;
 import com.popiang.model.Profile;
 import com.popiang.model.SiteUser;
+import com.popiang.service.FileService;
 import com.popiang.service.ProfileService;
 import com.popiang.service.UserService;
 
 //
-// controller handling profile activities
+// handling profile activities
 //
 @Controller
 public class ProfileController {
@@ -29,6 +36,9 @@ public class ProfileController {
 
 	@Autowired
 	private ProfileService profileService;
+	
+	@Autowired
+	private FileService fileService;
 	
 	@Autowired
 	private PolicyFactory policyFactory;
@@ -102,13 +112,47 @@ public class ProfileController {
 		SiteUser user = getUser();
 		Profile profile = profileService.getProfile(user);
 
-		// security measure to sanitize html before updating current user profile
+		// security measure to sanitize HTML before updating current user profile
 		profile.setMergeFrom(webProfile, policyFactory);
 
 		// updating profile of current user is there's no error
 		if(!result.hasErrors()) {
 			profileService.saveProfile(profile);
 			modelAndView.setViewName("redirect:/profile");
+		}
+		
+		return modelAndView;
+	}	
+	
+	//
+	// handling photo uploads
+	//
+	@RequestMapping(value = "/upload-profile-photo", method = RequestMethod.POST)
+	public ModelAndView handlePhotoUploads(ModelAndView modelAndView, @RequestParam("file") MultipartFile file) {
+		
+		modelAndView.setViewName("redirect:/profile");
+		
+		// get current authenticated user
+		SiteUser user = getUser();
+		
+		// get the profile of the current authenticated user
+		Profile profile = profileService.getProfile(user);
+		
+		try {
+			
+			// save the uploaded image and return several photo info
+			FileInfo photoInfo = fileService.saveImgFile(file, uploadPictureDirectory, "photo", "profile");
+
+			// save the photo info into the profile
+			profile.saveFileInfo(photoInfo);
+			
+			// save@update the profile
+			profileService.saveProfile(profile);
+			
+		} catch (InvalidFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		return modelAndView;
