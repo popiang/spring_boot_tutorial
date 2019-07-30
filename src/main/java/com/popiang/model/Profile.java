@@ -2,6 +2,7 @@ package com.popiang.model;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -40,6 +44,13 @@ public class Profile {
 
 	@Column(name = "photo_directory", length = 10)
 	private String photoDirectory;
+	
+	@ManyToMany
+	@JoinTable(name = "profile_interests", 
+	joinColumns = { @JoinColumn(name="profile_id") }, 
+	inverseJoinColumns = { @JoinColumn(name="interes_id") })
+	@OrderColumn(name = "display_order")
+	private Set<Interest> interests;
 
 	public Long getId() {
 		return id;
@@ -87,6 +98,14 @@ public class Profile {
 
 	public void setPhotoDirectory(String photoDirectory) {
 		this.photoDirectory = photoDirectory;
+	}
+	
+	public Set<Interest> getInterests() {
+		return interests;
+	}
+
+	public void setInterests(Set<Interest> interests) {
+		this.interests = interests;
 	}
 
 	//
