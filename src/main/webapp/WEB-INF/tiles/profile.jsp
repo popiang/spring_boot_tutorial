@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<c:url var="profilePhoto" value="/profilephoto" />
+<c:url var="profilePhoto" value="/profilephoto/${userID}" />
 <c:url var="editProfileAbout" value="/edit-profile-about" />
 
 <div class="row d-flex justify-content-center">

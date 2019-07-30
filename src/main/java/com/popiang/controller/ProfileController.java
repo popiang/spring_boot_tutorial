@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,12 +83,17 @@ public class ProfileController {
 	}
 
 	//
-	// showing profile page of current user
+	// private method called in public showProfile method
 	//
-	@RequestMapping("/profile")
-	public ModelAndView showProfile(ModelAndView modelAndView) {
-	
-		SiteUser user = getUser();
+	private ModelAndView showProfile(SiteUser user) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if(user == null) {
+			modelAndView.setViewName("redirect:/");
+			return modelAndView;
+		}
+		
 		Profile profile = profileService.getProfile(user);
 		
 		// for newly registered user which profile is not created yet
@@ -101,8 +107,32 @@ public class ProfileController {
 		Profile webProfile = new Profile();
 		webProfile.safeCopyFrom(profile);
 		
+		modelAndView.getModel().put("userID", user.getId());
 		modelAndView.getModel().put("profile", webProfile);
 		modelAndView.setViewName("app.profile");
+		
+		return modelAndView;
+	}
+	
+	//
+	// showing profile page of current user
+	//
+	@RequestMapping("/profile")
+	public ModelAndView showProfile() {
+	
+		SiteUser user = getUser();
+
+		ModelAndView modelAndView = showProfile(user);
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping("/profile/{id}")
+	public ModelAndView showProfile(@PathVariable("id") Long id) {
+		
+		SiteUser user = userService.getUser(id);
+
+		ModelAndView modelAndView = showProfile(user);
 		
 		return modelAndView;
 	}
@@ -201,11 +231,11 @@ public class ProfileController {
 	// honestly, i don't really understand this method!!!
 	// i think this method responsible to display the profile picture
 	//
-	@RequestMapping(value = "/profilephoto", method = RequestMethod.GET)
+	@RequestMapping(value = "/profilephoto/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<InputStreamResource> servePhoto() throws IOException {
+	public ResponseEntity<InputStreamResource> servePhoto(@PathVariable("id") Long id) throws IOException {
 		
-		SiteUser user = getUser();
+		SiteUser user = userService.getUser(id);
 		Profile profile = profileService.getProfile(user);
 		
 		Path photoPath = Paths.get(uploadPictureDirectory, "default", "default-profile.png");
