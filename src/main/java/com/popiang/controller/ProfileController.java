@@ -1,12 +1,21 @@
 package com.popiang.controller;
 
 import java.io.IOException;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import javax.validation.Valid;
 
 import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,9 +23,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.popiang.exceptions.ImageTooSmallException;
 import com.popiang.exceptions.InvalidFileException;
 import com.popiang.model.FileInfo;
 import com.popiang.model.Profile;
@@ -24,6 +35,7 @@ import com.popiang.model.SiteUser;
 import com.popiang.service.FileService;
 import com.popiang.service.ProfileService;
 import com.popiang.service.UserService;
+import com.popiang.status.PhotoUploadStatus;
 
 //
 // handling profile activities
@@ -45,6 +57,18 @@ public class ProfileController {
 	
 	@Value("${picture.upload.directory}")
 	private String uploadPictureDirectory;
+	
+	@Value("${photo.status.ok}")
+	private String photoStatusOK;
+	
+	@Value("${photo.status.invalid}")
+	private String photoStatusInvalid;
+	
+	@Value("${photo.status.ioexception}")
+	private String photoStatusIOException;
+	
+	@Value("${photo.upload.toosmall}")
+	private String photoStatusTooSmall;
 	
 	//
 	// private method to get current authenticated user
@@ -128,9 +152,11 @@ public class ProfileController {
 	// handling photo uploads
 	//
 	@RequestMapping(value = "/upload-profile-photo", method = RequestMethod.POST)
-	public ModelAndView handlePhotoUploads(ModelAndView modelAndView, @RequestParam("file") MultipartFile file) {
+	@ResponseBody // return JSON data
+	public ResponseEntity<PhotoUploadStatus> handlePhotoUploads(ModelAndView modelAndView, @RequestParam("file") MultipartFile file) {
 		
-		modelAndView.setViewName("redirect:/profile");
+		// to capture upload status
+		PhotoUploadStatus status = new PhotoUploadStatus(photoStatusOK);
 		
 		// get current authenticated user
 		SiteUser user = getUser();
@@ -138,10 +164,13 @@ public class ProfileController {
 		// get the profile of the current authenticated user
 		Profile profile = profileService.getProfile(user);
 		
+		// getting the existing photo path if available
+		Path oldPhotoPath = profile.getPhotoPath(uploadPictureDirectory);
+		
 		try {
 			
 			// save the uploaded image and return several photo info
-			FileInfo photoInfo = fileService.saveImgFile(file, uploadPictureDirectory, "photo", "profile");
+			FileInfo photoInfo = fileService.saveImgFile(file, uploadPictureDirectory, "photo", "p" + user.getId(), 100, 100);
 
 			// save the photo info into the profile
 			profile.saveFileInfo(photoInfo);
@@ -149,13 +178,47 @@ public class ProfileController {
 			// save@update the profile
 			profileService.saveProfile(profile);
 			
-		} catch (InvalidFileException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			// delete old photo if available
+			if(oldPhotoPath != null) {
+				Files.delete(oldPhotoPath);
+			}
+			
+		} catch (InvalidFileException e) {				//
+			status.setMessage(photoStatusInvalid);		//
+			e.printStackTrace();						//
+		} catch (IOException e) {						//
+			status.setMessage(photoStatusIOException);	// handling errors in uploading photo
+			e.printStackTrace();						//
+		} catch (ImageTooSmallException e) {			//
+			status.setMessage(photoStatusTooSmall);		//
+			e.printStackTrace();						//
+		}												//
+		
+		return new ResponseEntity<>(status, HttpStatus.OK) ;
+	}			
+	
+	//
+	// honestly, i don't really understand this method!!!
+	// i think this method responsible to display the profile picture
+	//
+	@RequestMapping(value = "/profilephoto", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<InputStreamResource> servePhoto() throws IOException {
+		
+		SiteUser user = getUser();
+		Profile profile = profileService.getProfile(user);
+		
+		Path photoPath = Paths.get(uploadPictureDirectory, "default", "default-profile.png");
+		
+		if(profile != null && profile.getPhotoPath(uploadPictureDirectory) != null) {
+			photoPath = profile.getPhotoPath(uploadPictureDirectory);
 		}
 		
-		return modelAndView;
-	}	
+		return ResponseEntity
+				.ok()
+				.contentLength(Files.size(photoPath))
+				.contentType(MediaType.parseMediaType(URLConnection.guessContentTypeFromName(photoPath.toString())))
+				.body(new InputStreamResource(Files.newInputStream(photoPath, StandardOpenOption.READ)));
+	}
 	
 }

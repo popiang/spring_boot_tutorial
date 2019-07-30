@@ -1,5 +1,8 @@
 package com.popiang.model;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -96,7 +99,7 @@ public class Profile {
 	}
 
 	//
-	// updating profile after sanitize the html using policyFactory
+	// updating profile after sanitize the HTML using policyFactory
 	//
 	public void setMergeFrom(Profile webProfile, PolicyFactory policyFactory) {
 		if (webProfile.about != null) {
@@ -111,5 +114,17 @@ public class Profile {
 		this.photoName = fileInfo.getBasename();
 		this.photoExtension = fileInfo.getExtension();
 		this.photoDirectory = fileInfo.getSubDirectory();
+	}
+
+	//
+	// returning the full path of photo
+	//
+	public Path getPhotoPath(String baseDirectory) {
+		
+		if(photoName == null) {
+			return null;
+		}
+		
+		return Paths.get(baseDirectory, photoDirectory, photoName + "." + photoExtension);
 	}
 }

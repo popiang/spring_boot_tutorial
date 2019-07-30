@@ -45,7 +45,7 @@
 .profile-about {
 	width: 100%;
 	border: 1px solid gray;
-	padding: 20px;
+	padding: 40px;
 	overflow: auto;
 }
 
@@ -61,6 +61,21 @@
 	right: 35px;
 }
 
+#photo-upload-status {
+	position: absolute;
+	top: 5px;
+	left: 45px;
+	font-weight: bold;
+	color: green;
+}
+
+#photo-upload-form {
+	display: none;
+}
+
+#upload-photo {
+	font-size: small;
+}
 
 
 
