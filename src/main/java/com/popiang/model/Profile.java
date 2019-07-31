@@ -51,6 +51,14 @@ public class Profile {
 	inverseJoinColumns = { @JoinColumn(name="interes_id") })
 	@OrderColumn(name = "display_order")
 	private Set<Interest> interests;
+	
+	public Profile() {
+		
+	}
+	
+	public Profile(SiteUser user) {
+		this.user = user;
+	}
 
 	public Long getId() {
 		return id;
@@ -109,11 +117,16 @@ public class Profile {
 	}
 
 	//
+	// getting a copy of an about from a profile 
 	// security measure to avoid sensitive user info leaked to public
 	//
 	public void safeCopyFrom(Profile other) {
 		if (other.about != null) {
 			this.about = other.about;
+		}
+		
+		if(other.interests != null) {
+			this.interests = other.interests;
 		}
 	}
 

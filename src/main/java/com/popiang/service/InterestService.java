@@ -24,4 +24,16 @@ public class InterestService {
 		return interestDao.count();
 	}
 	
+	public Interest createOneIfNotExist(String interestText) {
+		
+		Interest interest = interestDao.findOneByName(interestText);
+		
+		if(interest == null) {
+			interest = new Interest(interestText);
+			interestDao.save(interest);
+		}
+		
+		return interest;
+	}
+	
 }
