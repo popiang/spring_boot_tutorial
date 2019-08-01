@@ -1,5 +1,10 @@
 package com.popiang.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.HashSet;
+
 import javax.transaction.Transactional;
 
 import org.junit.Test;
@@ -10,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.popiang.App;
+import com.popiang.model.Interest;
+import com.popiang.model.Profile;
 import com.popiang.model.SiteUser;
 import com.popiang.service.InterestService;
 import com.popiang.service.ProfileService;
@@ -31,9 +38,9 @@ public class ProfileTest {
 	private InterestService interestService;
 	
 	private SiteUser[] users = {
-			new SiteUser("testuser1@gmail.com", "hello"),
 			new SiteUser("testuser2@gmail.com", "hello"),
-			new SiteUser("testuser3@gmail.com", "hello")
+			new SiteUser("testuser3@gmail.com", "hello"),
+			new SiteUser("testuser4@gmail.com", "hello")
 	};
 	
 	private String[][] interests = {
@@ -45,6 +52,35 @@ public class ProfileTest {
 	@Test
 	public void testInterest() {
 		
+		for(int i = 0; i < users.length; ++i) {
+			
+			SiteUser user = users[i];
+			String[] interestArray = interests[i];
+			
+			userService.register(user);
+			
+			HashSet<Interest> interestSet = new HashSet<>();
+			
+			for(String interestText : interestArray) {
+
+				Interest interest = interestService.createOneIfNotExist(interestText);
+				interestSet.add(interest);
+
+				assertNotNull("Interest should not be null", interest);
+				assertNotNull("Interest should have ID", interest.getId());
+				assertEquals("Interest text should match", interestText, interest.getName());
+				
+			}
+			
+			Profile profile = new Profile(user);
+			profile.setInterests(interestSet);
+			profileService.saveProfile(profile);
+			
+			Profile retreivedProfile = profileService.getProfile(user);
+			
+			assertEquals("Profile should match", profile, retreivedProfile);
+			assertEquals("Interest sets should match", interestSet, retreivedProfile.getInterests()); 
+			
+		}
 	}
-	
 }

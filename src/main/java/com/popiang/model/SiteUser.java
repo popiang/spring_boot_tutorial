@@ -11,6 +11,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.popiang.validation.PasswordMatch;
 
 @Entity
@@ -91,11 +93,16 @@ public class SiteUser {
 		return plainPassword;
 	}
 
+//	public void setPlainPassword(String plainPassword) {
+//		this.password = plainPassword;
+//		this.plainPassword = plainPassword;
+//	}
+
 	public void setPlainPassword(String plainPassword) {
-		this.password = plainPassword;
+		this.password = new BCryptPasswordEncoder().encode(plainPassword);
 		this.plainPassword = plainPassword;
 	}
-
+	
 	public String getRepeatPassword() {
 		return repeatPassword;
 	}

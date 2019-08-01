@@ -14,12 +14,12 @@ public class ProfileService {
 	@Autowired
 	private ProfileDao profileDao;
 	
-	@PreAuthorize("isAuthenticated()")
+	//@PreAuthorize("isAuthenticated()")
 	public void saveProfile(Profile profile) {
 		profileDao.save(profile);
 	}
 	
-	@PreAuthorize("isAuthenticated()")
+	//@PreAuthorize("isAuthenticated()")
 	public Profile getProfile(SiteUser user) {
 		return profileDao.findByUser(user);
 	}
