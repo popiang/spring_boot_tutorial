@@ -45,7 +45,7 @@ public class Interest implements Comparable<Interest>{
 
 	@Override
 	public String toString() {
-		return "Interest [name=" + name + "]";
+		return this.name;
 	}
 
 	@Override

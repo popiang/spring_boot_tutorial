@@ -31,9 +31,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.popiang.exceptions.ImageTooSmallException;
 import com.popiang.exceptions.InvalidFileException;
 import com.popiang.model.FileInfo;
+import com.popiang.model.Interest;
 import com.popiang.model.Profile;
 import com.popiang.model.SiteUser;
 import com.popiang.service.FileService;
+import com.popiang.service.InterestService;
 import com.popiang.service.ProfileService;
 import com.popiang.service.UserService;
 import com.popiang.status.PhotoUploadStatus;
@@ -55,6 +57,9 @@ public class ProfileController {
 	
 	@Autowired
 	private PolicyFactory policyFactory;
+	
+	@Autowired
+	private InterestService interestService;
 	
 	@Value("${picture.upload.directory}")
 	private String uploadPictureDirectory;
@@ -124,6 +129,8 @@ public class ProfileController {
 
 		ModelAndView modelAndView = showProfile(user);
 		
+		modelAndView.getModel().put("ownProfile", true);
+		
 		return modelAndView;
 	}
 	
@@ -133,6 +140,8 @@ public class ProfileController {
 		SiteUser user = userService.getUser(id);
 
 		ModelAndView modelAndView = showProfile(user);
+		
+		modelAndView.getModel().put("ownProfile", false);
 		
 		return modelAndView;
 	}
@@ -250,5 +259,42 @@ public class ProfileController {
 				.contentType(MediaType.parseMediaType(URLConnection.guessContentTypeFromName(photoPath.toString())))
 				.body(new InputStreamResource(Files.newInputStream(photoPath, StandardOpenOption.READ)));
 	}
+	
+	//
+	// saving interest using REST
+	//
+	@RequestMapping(value = "/saveinterest", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<?> saveInterest(@RequestParam("name") String interestName) {
+		
+		SiteUser user = getUser();
+		Profile profile = profileService.getProfile(user);
+		
+		String cleanedInterestName = policyFactory.sanitize(interestName);
+		
+		Interest interest = interestService.createOneIfNotExist(cleanedInterestName);
+		
+		profile.addInterest(interest);
+		profileService.saveProfile(profile);
+		
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	//
+	// removing interest using REST
+	//
+	@RequestMapping(value = "/deleteinterest", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<?> deleteInterest(@RequestParam("name") String interestName) {
+		
+		SiteUser user = getUser();
+		Profile profile = profileService.getProfile(user);
+
+		profile.removeInterest(interestName);
+
+		profileService.saveProfile(profile);
+		
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}	
 	
 }

@@ -5,12 +5,32 @@
 
 <c:url var="profilePhoto" value="/profilephoto/${userID}" />
 <c:url var="editProfileAbout" value="/edit-profile-about" />
+<c:url var="saveInterest" value="/saveinterest" />
+<c:url var="deleteInterest" value="/deleteinterest"/>
 
 <div class="row d-flex justify-content-center">
 
 	<div class="col-md-10 col-md-offset-1">
-	
+
 		<div id="photo-upload-status"></div>
+	
+		<div id="interestDiv">
+			<ul id="interestList">
+			
+				<c:choose>
+					<c:when test="${empty profile.interests}">
+						<li>Add interest here</li>	
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="interest" items="${profile.interests}">
+							<li>${interest}</li>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+			
+				
+			</ul>
+		</div>	
 
 		<div class="profile-about">
 		
@@ -19,7 +39,9 @@
 					<img id="profile-image" src="${profilePhoto}">
 				</div>
 				<div class="text-center">
-					<a href="#" id="upload-photo">Upload Photo</a>
+					<c:if test="${ownProfile == true}">
+						<a href="#" id="upload-photo">Upload Photo</a>
+					</c:if>
 				</div>
 			</div>
 			
@@ -39,7 +61,9 @@
 		</div>
 		
 		<div class="profile-about-edit">
-			<a href="${editProfileAbout}">edit</a>
+			<c:if test="${ownProfile == true}">
+				<a href="${editProfileAbout}">edit</a>
+			</c:if>
 		</div>
 
 		<c:url value="/upload-profile-photo" var="uploadPhotoLink" />
@@ -100,8 +124,58 @@ function uploadPhoto(event) {
 	
 }
 
+function saveInterest(text) {
+	editInterest(text, "${saveInterest}");
+}
+
+function deleteInterest(text) {
+	editInterest(text, "${deleteInterest}");
+}
+
+function editInterest(text, actionUrl) {
+
+	var token = $("meta[name='_csrf']").attr("content");
+	var tokenHeader = $("meta[name='_csrf_header']").attr("content");
+
+	$.ajaxPrefilter(function(options, originalOptions, jqHXR) {
+		jqHXR.setRequestHeader(tokenHeader, token);
+	});
+	
+	$.ajax({
+		url: actionUrl,
+		data: {
+			"name": text
+		},
+		type: "POST",
+		success: function() {
+			alert("OK");
+		},
+		error: function() {
+			alert("Error");
+		}
+	});
+}
+
 $(document).ready(function() {
 
+	$('#interestList').tagit({
+		
+		afterTagAdded : function(event, ui) {
+			if(ui.duringInitialization != true) {
+				saveInterest(ui.tagLabel);
+			}
+		},
+		
+		afterTagRemoved : function(event, ui) {
+			deleteInterest(ui.tagLabel);
+		},
+		
+		caseSensitive : false,
+		allowSpaces : true,
+		tagLimit : 10,
+		readOnly: '${ownProfile}' == 'false'
+	});
+	
 	// trigger when upload photo link is clicked
 	$('#upload-photo').click(function(event) {
 		event.preventDefault();

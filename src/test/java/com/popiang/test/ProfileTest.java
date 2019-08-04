@@ -38,9 +38,9 @@ public class ProfileTest {
 	private InterestService interestService;
 	
 	private SiteUser[] users = {
+			new SiteUser("testuser1@gmail.com", "hello"),
 			new SiteUser("testuser2@gmail.com", "hello"),
-			new SiteUser("testuser3@gmail.com", "hello"),
-			new SiteUser("testuser4@gmail.com", "hello")
+			new SiteUser("testuser3@gmail.com", "hello")
 	};
 	
 	private String[][] interests = {
@@ -78,7 +78,6 @@ public class ProfileTest {
 			
 			Profile retreivedProfile = profileService.getProfile(user);
 			
-			assertEquals("Profile should match", profile, retreivedProfile);
 			assertEquals("Interest sets should match", interestSet, retreivedProfile.getInterests()); 
 			
 		}

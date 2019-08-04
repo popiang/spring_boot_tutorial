@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,10 +46,10 @@ public class Profile {
 	@Column(name = "photo_directory", length = 10)
 	private String photoDirectory;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "profile_interests", 
 	joinColumns = { @JoinColumn(name="profile_id") }, 
-	inverseJoinColumns = { @JoinColumn(name="interes_id") })
+	inverseJoinColumns = { @JoinColumn(name="interest_id") })
 	@OrderColumn(name = "display_order")
 	private Set<Interest> interests;
 	
@@ -117,7 +118,7 @@ public class Profile {
 	}
 
 	//
-	// getting a copy of an about from a profile 
+	// getting a copy of an about from a profile to display in page
 	// security measure to avoid sensitive user info leaked to public
 	//
 	public void safeCopyFrom(Profile other) {
@@ -159,4 +160,20 @@ public class Profile {
 		
 		return Paths.get(baseDirectory, photoDirectory, photoName + "." + photoExtension);
 	}
+
+	@Override
+	public String toString() {
+		return "Profile [id=" + id + ", user=" + user + ", about=" + about + ", photoName=" + photoName
+				+ ", photoExtension=" + photoExtension + ", photoDirectory=" + photoDirectory + ", interests="
+				+ interests + "]";
+	}
+
+	public void addInterest(Interest interest) {
+		interests.add(interest);
+	}
+
+	public void removeInterest(String interestName) {
+		interests.remove(new Interest(interestName));
+	}
+
 }

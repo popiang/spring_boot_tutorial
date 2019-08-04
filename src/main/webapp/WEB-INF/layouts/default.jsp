@@ -13,6 +13,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+<meta name="_csrf" content="${_csrf.token}">
+<meta name="_csrf_header" content="${_csrf.headerName}">
+
 <c:set var="contextRoot" value="${contextRoot.request.contextPath}"/>
 
 <!-- Optional JavaScript -->
@@ -34,6 +37,11 @@
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <link rel="stylesheet" href="${contextRoot}/css/main.css">
+
+<!-- For jQuery Tag-It -->
+<link rel="stylesheet" href="${contextRoot}/css/jquery.tagit.css">
+<script src="${contextRoot}/js/jquery-ui.min.js"></script>
+<script src="${contextRoot}/js/tag-it.js"></script>
 
 <title><tiles:insertAttribute name="title" /></title>
 
