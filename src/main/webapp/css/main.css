@@ -30,6 +30,11 @@
 	font-size: larger;
 }
 
+.status_row {
+	margin-top: 4em;
+	margin-bottom: 6em;
+}
+
 .edit-links {
 	margin-top: 10px;
 }

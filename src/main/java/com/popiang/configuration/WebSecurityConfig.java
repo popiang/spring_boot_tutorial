@@ -38,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 							 "/invaliduser",
 							 "/expiredtoken",
 							 "/verifyemail",
+							 "/search",
 							 "/js/**", 
 							 "/css/**", 
 							 "/img/**")
