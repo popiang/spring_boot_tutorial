@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +26,16 @@ public class SiteUser {
 	@Column(name = "id")
 	private long id;
 	
+	@Column(name = "firstname", length = 25)
+	@Size(min = 2, max = 25, message = "{register.name.size}")
+	private String firstname;
+	
+	@NotNull
+	@Column(name = "lastname", length = 25)
+	@Size(min = 2, max = 25, message = "{register.name.size}") 
+	private String lastname;
+	
+	@NotNull
 	@Column(name = "email", unique = true)
 	@Email(message = "{register.email.invalid}")
 	@NotBlank(message = "{register.email.invalid}")
@@ -93,11 +104,6 @@ public class SiteUser {
 		return plainPassword;
 	}
 
-//	public void setPlainPassword(String plainPassword) {
-//		this.password = plainPassword;
-//		this.plainPassword = plainPassword;
-//	}
-
 	public void setPlainPassword(String plainPassword) {
 		this.password = new BCryptPasswordEncoder().encode(plainPassword);
 		this.plainPassword = plainPassword;
@@ -117,6 +123,22 @@ public class SiteUser {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstName) {
+		this.firstname = firstName;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastName) {
+		this.lastname = lastName;
 	}
 
 	@Override

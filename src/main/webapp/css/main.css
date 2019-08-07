@@ -30,9 +30,9 @@
 	font-size: larger;
 }
 
-.status_row {
-	margin-top: 4em;
-	margin-bottom: 6em;
+body > div > div.row.d-flex.justify-content-center.status-row {
+	margin-top: 3em;
+	margin-bottom: 5em;
 }
 
 .edit-links {
@@ -116,4 +116,10 @@ div[role=status] {
 #ui-id-1 {
 	display: none;
 }
+
+.login-form form{
+	width: 450px;
+}
+
+
 

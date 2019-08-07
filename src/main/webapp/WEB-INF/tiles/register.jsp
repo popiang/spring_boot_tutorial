@@ -42,8 +42,17 @@
 			<form:form modelAttribute="siteUser" method="post">
 		
 				<h2 class="text-center">Create An Account</h2>
-												
-				<div class="form-group m-0-bottom">
+				
+				<div class="input-group">
+					<form:input path="firstname" type="text" class="form-control" placeholder="First Name" required="required" />
+					<span class="input-group-btn" style="width: 10px"></span>
+					<form:input path="lastname" type="text" class="form-control" placeholder="Last Name" required="required" />
+				</div>
+				
+				<form:errors path='firstname' class="errors" />
+				<form:errors path='lastname' class="errors" />
+				
+				<div class="form-group m-10-top m-0-bottom">
 					<form:input path="email" type="text" class="form-control" placeholder="Email" required="required" />
 				</div>
 
@@ -76,5 +85,3 @@
 	</div>
 
 </div>
-
-    

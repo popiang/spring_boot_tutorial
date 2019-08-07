@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SearchController {
 
-	@RequestMapping(name = "/search", method = RequestMethod.POST)
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public ModelAndView search(ModelAndView modelAndView, @RequestParam("s") String text) {
 		
 		System.out.println("Search text: " + text);
@@ -20,3 +20,4 @@ public class SearchController {
 	}
 	
 }
+ 
