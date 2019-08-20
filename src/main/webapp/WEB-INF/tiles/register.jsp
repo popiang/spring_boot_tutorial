@@ -5,17 +5,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <style type="text/css">
-	.login-form {
-		width: 340px;
+	.register-form {
+		max-width: 500px;
     	margin: 50px auto;
 	}
-    .login-form form {
+    .register-form form {
     	margin-bottom: 15px;
         background: #f7f7f7;
         box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
         padding: 30px;
     }
-    .login-form h2 {
+    .register-form h2 {
         margin: 0 0 15px;
     }
     .form-control, .btn {
@@ -30,11 +30,11 @@
 
 <c:url var="loginUrl" value="/login" />
 
-<div class="row d-flex justify-content-center">
+<div class="row justify-content-center">
 
-	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+	<div class="col-md-6">
 
-		<div class="login-form">
+		<div class="register-form">
 			<c:set var="rpError">
 				<form:errors path="siteUser" class="errors" />
 			</c:set>

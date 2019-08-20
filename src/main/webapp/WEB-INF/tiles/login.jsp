@@ -6,7 +6,7 @@
 
 <style type="text/css">
 	.login-form {
-		width: 340px;
+		max-width: 380px;
     	margin: 50px auto;
 	}
     .login-form form {
@@ -30,10 +30,12 @@
 
 <c:url var="loginUrl" value="/login" />
 
-<div class="row d-flex justify-content-center">
+<div class="row justify-content-center">
 
-	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-
+	<!--  <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2"> -->
+	
+	<div class="col-md-6">
+	
 		<div class="login-form">
 		
 			<form action="${loginUrl}" method="post">

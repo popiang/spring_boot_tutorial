@@ -10,7 +10,7 @@
 
 <div class="row d-flex justify-content-center">
 
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-10">
 
 		<div id="photo-upload-status"></div>
 	
